@@ -4,6 +4,30 @@
 
 <head>
 <title>Fecesbook</title>
+<script>
+function update()
+{
+	node=document.createElement("p");
+	printdate=new Date();
+	mm=printdate.getMonth()+1;
+	dd=printdate.getDate();
+	yyyy=printdate.getFullYear();
+	hh=printdate.getHours();
+	if(printdate.getMinutes()<10)
+		{
+		minmin='0'+printdate.getMinutes();
+		}
+	else
+		{
+		minmin=printdate.getMinutes();
+		}
+	message=mm+"/"+dd+"/"+yyyy+" "+hh+":"+minmin+" - "+document.getElementById("msg").value;
+	textnode=document.createTextNode(message);
+	node.appendChild(textnode);
+	statusList=document.getElementById("status");
+	statusList.insertBefore(node,statusList.childNodes[0]);
+}
+</script>
 </head>
 
 <body>
@@ -19,7 +43,7 @@
 		</ul>
 	</div>
 	<h2 id="fullname">Barney Gumble</h2>
-	<h3>What are you thinking about? <input type="text" id="msg" name="msg" size="30" /></h3>
+	<h3>What are you thinking about? <input type="text" id="msg" name="msg" size="30" onchange="update()" /></h3>
 	<h3>Updates</h3>
 	<div id="status">
 	</div>
