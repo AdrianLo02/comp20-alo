@@ -1,13 +1,16 @@
 function draw() {
-	if (game.getContext) {
-        ctx = game.getContext('2d');
+	sprite = new Image();
+	sprite.src = 'assets/duckhunt.png';
+	sprite.onload = function(){
+		game = document.getElementById('game');
+		ctx = game.getContext('2d');
 
 		//drawing the sky
 		ctx.fillStyle="#87CEEB";
 		ctx.fillRect(0, 0, 800, 600);
 
+		//drawing from the sprite sheet
 		drawTree();
-		//drawing the ground
 		drawGround();
 		drawDog();
 	}
@@ -25,7 +28,7 @@ function drawTree() {
 	drawSprite(sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
 }
 
-//defines arguments pertaining to the ground and draws by calling drawObject
+//defines values signifying what portion of the sprite sheet to use and where to draw on the canvas, then draws by calling drawSprite
 function drawGround() {
 	sourceX=100;
 	sourceY=700;
@@ -50,11 +53,27 @@ function drawDog() {
 	drawSprite(sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
 }
 
-//draws a portion of the sprite sheet onto the canvas
+function drawDuck1 {
+
+}
+
+function drawDuck2 {
+	
+}
+
+function drawDuck3 {
+	
+}
+
+function drawDuck4 {
+	
+}
+
+function drawDuck5 {
+	
+}
+
+//draws a portion of the sprite sheet onto the canvas by calling drawImage
 function drawSprite(sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight) {
-	img = new Image();
-	img.onload=function() {
-		ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
-	}
-	img.src = 'assets/duckhunt.png';
+	ctx.drawImage(sprite, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
 }
