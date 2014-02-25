@@ -1,9 +1,12 @@
 function draw() {
 	sprite = new Image();
 	sprite.src = 'assets/duckhunt.png';
+	
+	//loading the image, then calling other functions to draw
 	sprite.onload = function(){
 		game = document.getElementById('game');
 		ctx = game.getContext('2d');
+		ctx.imageSmoothingEnabled = false;
 
 		//drawing the sky
 		ctx.fillStyle="#87CEEB";
