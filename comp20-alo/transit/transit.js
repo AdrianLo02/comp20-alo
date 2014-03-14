@@ -78,22 +78,18 @@ function initialize() {
 function dataReady_rodeo() {
 	if(rodeo.readyState == 4 && rodeo.status == 200) {
 		rodeoData = JSON.parse(rodeo.responseText);
-		console.log("The rodeo color is: " + rodeoData.line);
 		var color = rodeoData.line;
 		renderMarkers(color);
 		drawLine(color);
 	}
 	else if(rodeo.readyState == 4 && rodeo.status == 500) {
-		console.log('intentional 500 error');
 	}
 }
 
 
 function renderMarkers(color) {
-	console.log('rendering markers...');
 	for(i = 0; i < stationList.length; i++) {
 		if(stationList[i].line.toLowerCase() == color) {
-			console.log(stationList[i].line + ", " + stationList[i].station);
 			createMarker(i, color);
 		}
 	}
@@ -132,7 +128,6 @@ function createMarker(i, color) {
 				content += "<td>" + mins + ":" + secs + "</td>";
 			}
 		}
-		console.log("Iterated though train " + i);
 	}
 
 	//Dealing with red line split for polyline
