@@ -64,6 +64,7 @@ var myOptions = {
 var map;
 coordsList = [];
 forkList = [];
+var infowindow = new google.maps.InfoWindow();
 
 function initialize() {
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
@@ -106,6 +107,13 @@ function createMarker(i) {
 		icon: tIcon,
 	});
 	marker.setMap(map);
+
+	var content = "<strong>" + stationList[i]["station"] + "</strong>"
+	google.maps.event.addListener(marker, 'click', function() {
+		infowindow.setContent(content);
+		infowindow.open(map, this);
+	});
+
 	//Dealing with red line split for polyline
 	if(i <= red_End) {
 		coordsList.push(stationPos);
