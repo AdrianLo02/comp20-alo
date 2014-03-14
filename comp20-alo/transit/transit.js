@@ -78,8 +78,8 @@ function initialize() {
 function dataReady_rodeo() {
 	if(rodeo.readyState == 4 && rodeo.status == 200) {
 		rodeoData = JSON.parse(rodeo.responseText);
-		console.log("The rodeo color is: " + rodeoData["line"]);
-		var color = rodeoData["line"];
+		console.log("The rodeo color is: " + rodeoData.line);
+		var color = rodeoData.line;
 		renderMarkers(color);
 		drawLine(color);
 	}
@@ -92,27 +92,48 @@ function dataReady_rodeo() {
 function renderMarkers(color) {
 	console.log('rendering markers...');
 	for(i = 0; i < stationList.length; i++) {
-		if(stationList[i]["line"].toLowerCase() == color) {
-			console.log(stationList[i]["line"] + ", " + stationList[i]["station"]);
-			createMarker(i);
+		if(stationList[i].line.toLowerCase() == color) {
+			console.log(stationList[i].line + ", " + stationList[i].station);
+			createMarker(i, color);
 		}
 	}
 }
 
-function createMarker(i) {
-	var stationPos = new google.maps.LatLng(stationList[i]["lat"], stationList[i]["lng"]);
+function createMarker(i, color) {
+	var stationPos = new google.maps.LatLng(stationList[i].lat, stationList[i].lng);
 	var marker = new google.maps.Marker({
 		position: stationPos,
-		title: stationList[i]["station"],
+		title: stationList[i].station,
 		icon: tIcon,
 	});
 	marker.setMap(map);
 
-	var content = "<strong>" + stationList[i]["station"] + "</strong>"
+	var content = "<strong>" + stationList[i].station + "</strong>" + '<table id="schedule"><tr><th>Line</th><th>Trip #</th><th>Direction</th><th>Time Remaining</th></tr>';
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.setContent(content);
 		infowindow.open(map, this);
 	});
+	for(j = 0; j < rodeoData.schedule.length; j++) {
+		var sched = rodeoData.schedule[j];
+		for(k = 0; k < sched.Predictions.length; k++) {
+			var pred = sched.Predictions[k];
+			if(pred.Stop == stationList[i].station) {
+				content += "<tr><td>" + color + "</td>";
+				content += "<td>" + sched.TripID + "</td>";
+				content += "<td>" + sched.Destination + "</td>";
+				var mins = Math.floor(pred.Seconds/60);
+				var secs = pred.Seconds - mins*60;
+				if(mins < 10) {
+					mins = "0" + mins;
+				}
+				if(secs < 10) {
+					secs = "0" + secs;
+				}
+				content += "<td>" + mins + ":" + secs + "</td>";
+			}
+		}
+		console.log("Iterated though train " + i);
+	}
 
 	//Dealing with red line split for polyline
 	if(i <= red_End) {
@@ -137,7 +158,7 @@ function drawLine(color) {
 }
 
 function drawFork(color) {
-	forkList.unshift(new google.maps.LatLng(stationList[red_forkPt]["lat"], stationList[red_forkPt]["lng"]));
+	forkList.unshift(new google.maps.LatLng(stationList[red_forkPt].lat, stationList[red_forkPt].lng));
 	var line = new google.maps.Polyline({
 	    path: forkList,
 	    geodesic: true,

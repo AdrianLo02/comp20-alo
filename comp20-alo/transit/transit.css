@@ -9,3 +9,8 @@ body {
 #map_canvas {
 	height: 100%
 }
+
+table,th,tr,td {
+	border: 1px solid black;
+	padding: 3px;
+}
