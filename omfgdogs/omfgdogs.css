@@ -1,0 +1,24 @@
+body {
+	background-image:url(resources/omfgdogs.gif);
+}
+
+h1 {
+	visibility: hidden;
+}
+
+p {
+	margin-right: 36px;
+	font-size: 24px;
+	position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: black;
+}
+
+a:link {
+	color: yellow;
+}
+
+a:visited {
+	color: orange;
+}
