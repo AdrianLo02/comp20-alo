@@ -55,7 +55,11 @@ const red_forkPt = 43;
 const red_End = 47;
 var rodeo;
 var tIcon = 'resources/t_marker.png';
-var landmark = new google.maps.LatLng(42.4069, -71.1198);
+var myLat = 0;
+var myLng = 0;
+var myMarker;
+var myContent;
+var landmark = new google.maps.LatLng(myLat, myLng);
 var myOptions = {
 	zoom:13,
 	center: landmark,
@@ -68,11 +72,46 @@ var infowindow = new google.maps.InfoWindow();
 
 function initialize() {
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	getMyLocation();
+}
+
+function getMyLocation()
+	{
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				myLat = position.coords.latitude;
+				myLng = position.coords.longitude;
+				renderMap();
+			});
+		}
+		else {
+			alert("Could not find your location.");
+		}
+	}
+
+function renderMap() {
+	landmark = new google.maps.LatLng(myLat, myLng);
+	map.panTo(landmark)
+	makeMyMarker();
 	rodeo = new XMLHttpRequest();
 	rodeo.open("get", "http://mbtamap.herokuapp.com/mapper/rodeo.json", true);
-
 	rodeo.onreadystatechange = dataReady_rodeo;
 	rodeo.send(null);
+}
+
+function makeMyMarker() {
+	myMarker = new google.maps.Marker({
+		position: landmark,
+		title: "You are here",
+	});
+	myMarker.setMap(map);
+	myContent = "You are here."
+	infowindow.setContent(myContent);
+	infowindow.open(map, myMarker);
+	google.maps.event.addListener(myMarker, 'click', function() {
+		infowindow.setContent(myContent);
+		infowindow.open(map, this);
+	});
 }
 
 function dataReady_rodeo() {
