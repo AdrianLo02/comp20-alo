@@ -58,7 +58,7 @@ var tIcon = 'resources/t_marker.png';
 var myLat = 0;
 var myLng = 0;
 var myMarker;
-var myContent;
+var myContent = "You are here.";
 var landmark = new google.maps.LatLng(myLat, myLng);
 var myOptions = {
 	zoom:13,
@@ -69,30 +69,30 @@ var map;
 coordsList = [];
 forkList = [];
 var infowindow = new google.maps.InfoWindow();
+var minDist = 999999;
+var closest;
 
 function initialize() {
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	getMyLocation();
 }
 
-function getMyLocation()
-	{
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(position) {
-				myLat = position.coords.latitude;
-				myLng = position.coords.longitude;
-				renderMap();
-			});
-		}
-		else {
-			alert("Could not find your location.");
-		}
+function getMyLocation() {
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			myLat = position.coords.latitude;
+			myLng = position.coords.longitude;
+			renderMap();
+		});
 	}
+	else {
+		alert("Could not find your location.");
+	}
+}
 
 function renderMap() {
 	landmark = new google.maps.LatLng(myLat, myLng);
 	map.panTo(landmark)
-	makeMyMarker();
 	rodeo = new XMLHttpRequest();
 	rodeo.open("get", "http://mbtamap.herokuapp.com/mapper/rodeo.json", true);
 	rodeo.onreadystatechange = dataReady_rodeo;
@@ -105,7 +105,6 @@ function makeMyMarker() {
 		title: "You are here",
 	});
 	myMarker.setMap(map);
-	myContent = "You are here."
 	infowindow.setContent(myContent);
 	infowindow.open(map, myMarker);
 	google.maps.event.addListener(myMarker, 'click', function() {
@@ -120,11 +119,14 @@ function dataReady_rodeo() {
 		var color = rodeoData.line;
 		renderMarkers(color);
 		drawLine(color);
+		myContent += "<br>The closest " + color + " line station to you is " + closest + ", which is approximately " + minDist.toFixed(2) + " miles away.";
+		makeMyMarker();
 	}
 	else if(rodeo.readyState == 4 && rodeo.status == 500) {
+		myContent += "<br>500 Internal Server Error";
+		makeMyMarker();
 	}
 }
-
 
 function renderMarkers(color) {
 	for(i = 0; i < stationList.length; i++) {
@@ -169,6 +171,12 @@ function createMarker(i, color) {
 		}
 	}
 
+	var dist = haversine(stationList[i].lat, stationList[i].lng);
+	if(dist < minDist) {
+		minDist = dist;
+		closest = stationList[i].station;
+	}
+
 	//Dealing with red line split for polyline
 	if(i <= red_End) {
 		coordsList.push(stationPos);
@@ -200,4 +208,21 @@ function drawFork(color) {
 	    strokeWeight: 3
   	});
 	line.setMap(map);
+}
+
+function haversine(stationLat, stationLng) {
+	var R = 6371;
+	var x1 = myLat-stationLat;
+	var dLat = toRad(x1);
+	var x2 = myLng-stationLng;
+	var dLon = toRad(x2); 
+	var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(toRad(stationLat)) * Math.cos(toRad(myLat)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	var d = R * c; 
+	var miles = d/1.609344;
+	return miles;
+}
+
+function toRad(x) {
+   return x * Math.PI / 180;
 }
