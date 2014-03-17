@@ -5,6 +5,14 @@
 <head>
 <title>Fecesbook</title>
 <script>
+
+function init() {
+	for (key in localStorage) {
+		 	node=document.createElement("p");
+			display(node, localStorage[key]);
+	}
+}
+
 function update()
 {
 	node=document.createElement("p");
@@ -22,15 +30,23 @@ function update()
 		minmin=printdate.getMinutes();
 		}
 	message=mm+"/"+dd+"/"+yyyy+" "+hh+":"+minmin+" - "+document.getElementById("msg").value;
+	localStorage[new Date().getTime()] = message;
+	display(node, message);
+
+
+}
+
+function display(node, message) {
 	textnode=document.createTextNode(message);
 	node.appendChild(textnode);
 	statusList=document.getElementById("status");
 	statusList.insertBefore(node,statusList.childNodes[0]);
 }
+
 </script>
 </head>
 
-<body>
+<body onload="init()">
 	<h1>Fecebook</h1>
 	<div id="nav">
 		<ul>
