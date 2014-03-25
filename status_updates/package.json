@@ -1,0 +1,23 @@
+{
+  "name": "node_app",
+  "version": "0.0.0",
+  "description": "This is an example app.",
+  "main": "web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tuftsdev/comp20-alo/tree/master/status_updates"
+  },
+  "keywords": [
+    "example",
+    "heroku"
+  ],
+  "author": "Adrian Lo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "~3.5.1",
+    "logfmt": "~1.1.1"
+  }
+}
