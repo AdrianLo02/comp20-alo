@@ -1,6 +1,8 @@
 Assignment 4: 2048 Game Center
 by Adrian Lo
 
+http://radiant-eyrie-3691.herokuapp.com/
+
 1. The following aspects of the work have been implemented:
 	-2048 JS code has be modified to post the username, score and grid to the app
 	-POST /submit.json API submits the json to the mongoDB collection
