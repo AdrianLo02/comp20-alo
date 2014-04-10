@@ -4,11 +4,11 @@ by Adrian Lo
 1. The following aspects of the work have been implemented:
 	-2048 JS code has be modified to post the username, score and grid to the app
 	-POST /submit.json API submits the json to the mongoDB collection
+	-scores.json API returns JSON array for scores of all users
+	-Index displays all scores, usernames and timestamps
 
 To my knowledge, these are the aspects of the work that need to be implemented:
-	
-	-app needs to get the data that has already been posted in the database
-	-index needs to display the scores
+	-scores.json API needs to return JSON for specified players only
 
 2. I have not collaborated with anyone for this assignment.
 
