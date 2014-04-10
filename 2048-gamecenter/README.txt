@@ -4,15 +4,13 @@ by Adrian Lo
 1. The following aspects of the work have been implemented:
 	-2048 JS code has be modified to post the username, score and grid to the app
 	-POST /submit.json API submits the json to the mongoDB collection
-	-scores.json API returns JSON array for scores of all users
-	-Index displays all scores, usernames and timestamps
-
-To my knowledge, these are the aspects of the work that need to be implemented:
-	-scores.json API needs to return JSON for specified players only
+	-scores.json API returns JSON array for specified users
+	-Index displays all scores, usernames and timestamps arranged by score
+	-App has been pushed to Heroku
 
 2. I have not collaborated with anyone for this assignment.
 
-3.
+3. This assignment took approximately 15 hours to complete.
 
 5. These values are stored in local storage, with the best score being the value of the bestScore key and the state of the game being the value of the gameState key. They are also stored temporarily in game_manager.js, in the this.score and this.grid.serialize() objects.
 
