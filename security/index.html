@@ -10,9 +10,17 @@
 	<h1>Security Assessment of 2048 Game Center</h1>
 	<p>By Adrian Lo</p>
 	<h2>Introduction</h2>
+	<p>The following is an assessment of the 2048 Game Center developed by Max Cohen for Comp 20. The application uses MongoDB to store and display a list of high scores for the game 2048, and allows users to view scores for individual users. In its current state, the API is insecure and vulnerable to a number of attacks. The purpose of this assessment is to identify some of these vulnerabilities and provide solutions to improve the application's security.
 	<h2>Methodology</h2>
 	<h2>Abstract of Findings</h2>
 	<h2>Issues Found</h2>
+	<h3>No validation of user input</h3>
+	<p>The API does not validate user input, leaving it vulnerable to injection of code. It was easy for me to turn the application into a “rickroll” by entering a script in the username field redirecting to the infamous YouTube video.</p>
+	<p><a href="images/rickroll.jpg"><img src="images/rickroll.jpg" alt="Rickroll'd" width="333" height="407" /></a></p>
+	<p>A solution to this vulnerability is...</p>
+	<h3>Cross-origin resource sharing</h3>
+	<p>The API is currently set so that CORS is enabled for all domains. This makes the application vulnerable to attacks from other users. For instance, it was easy for me to create a page that allows me to input post irrelevant data to the database.</p>
+	<h2>Conclusion</h2>
 </body>
 
 </html>
