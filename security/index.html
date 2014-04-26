@@ -19,7 +19,10 @@
 	<p><a href="images/rickroll.jpg"><img src="images/rickroll.jpg" alt="Rickroll'd" width="333" height="407" /></a></p>
 	<p>A solution to this vulnerability is...</p>
 	<h3>Cross-origin resource sharing</h3>
-	<p>The API is currently set so that CORS is enabled for all domains. This makes the application vulnerable to attacks from other users. For instance, it was easy for me to create a page that allows me to input post irrelevant data to the database.</p>
+	<p>The API is currently set so that CORS is enabled for all domains. This makes the application vulnerable to attacks from other users. For instance, it was easy for me to create a page that allows me to input post nonsense and irrelevant data to the database. Such pages could easily be used to inject malicious code or overload the database.</p>
+	<p><a href="images/cors.jpg"><img src="images/cors.jpg" alt="CORS" width="453" height="270" /></a></p>
+	<p>Solving this issue is a simple process. All that needs to be done is to replace the asterisk, which allows posts from any domain, with an actual URI of the page that is actually intended to do the posting.</p>
+	<p>An even more elegant solution would be to disable CORS entirely, and instead host the 2048 game itself on the server-side, perhaps on the index with a scoreboard integrated with the page.</p>
 	<h2>Conclusion</h2>
 </body>
 
