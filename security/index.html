@@ -10,20 +10,28 @@
 	<h1>Security Assessment of 2048 Game Center</h1>
 	<p>By Adrian Lo</p>
 	<h2>Introduction</h2>
-	<p>The following is an assessment of the 2048 Game Center developed by Max Cohen for Comp 20. The application uses MongoDB to store and display a list of high scores for the game 2048, and allows users to view scores for individual users. In its current state, the API is insecure and vulnerable to a number of attacks. The purpose of this assessment is to identify some of these vulnerabilities and provide solutions to improve the application's security.
+	<p>The following is an assessment of the 2048 Game Center developed by Max Cohen for Comp 20. The application uses MongoDB to store and display a list of high scores for the game 2048, and allows users to view scores for individual users. In its current state, the API is insecure and vulnerable to a number of attacks. The purpose of this assessment is to identify some of these vulnerabilities and provide solutions to improve the application's security.</p>
 	<h2>Methodology</h2>
+	<p>The application was first assessed using "black box" testing, where I performed attacks using the curl command, the modified 2048 game code, and finally a test page that I wrote myself. This is how script injection was proven to be a vulnerability. I then moved on to "white box" testing, where I looked at the source code then went back to perform more attacks; this was how the CORS vulnerability was found. Finally, I was able to extrapolate the presense of the authentication issue based on the ways in which I was already able to attack the application.</p>
 	<h2>Abstract of Findings</h2>
+	<p>The security vulnerabilities identified in this assessment involve exploits related to the process of submitting score entries to the database. In the web application's current state, there are many ways to make these posts using methods other than playing the actual 2048 game to completion. Many of these methods allow users to easily push their own arbitrary data to the server, including data that is irrelevant, improperly formatted or even entries in the form malicous code that changes how the application functions. It is also possible to render the application completely non-functional with these methods.</p>
 	<h2>Issues Found</h2>
 	<h3>No validation of user input</h3>
+	<p>Found in the submit.json API. HIGH severity: potential of attacks from injection of malicious code presents a serious security risk.</p>
 	<p>The API does not validate user input, leaving it vulnerable to injection of code. It was easy for me to turn the application into a “rickroll” by entering a script in the username field redirecting to the infamous YouTube video.</p>
 	<p><a href="images/rickroll.jpg"><img src="images/rickroll.jpg" alt="Rickroll'd" width="333" height="407" /></a></p>
-	<p>A solution to this vulnerability is...</p>
+	<p>One possible solution to this vulnerability is to use JSON.stringify() in the submit.json API to store each field in the form of a string before the document enters the database, so that any code that someone attempts to inject into the database will not be executed. e.g. <code>var username = JSON.stringify(req.body.username);</code></p>
 	<h3>Cross-origin resource sharing</h3>
-	<p>The API is currently set so that CORS is enabled for all domains. This makes the application vulnerable to attacks from other users. For instance, it was easy for me to create a page that allows me to input post nonsense and irrelevant data to the database. Such pages could easily be used to inject malicious code or overload the database.</p>
+	<p>Affects the submit.json API. MEDIUM severity: leaves the application open to overloading or potential attacks from other users, but the issue is easily resolved.</p>
+	<p>The API is currently set so that CORS is enabled for all domains. This makes the application vulnerable to potential attacks from other users. For instance, it was easy for me to create a page that allows me to input post nonsense and irrelevant data to the database. Such pages could easily be used to inject malicious code or overload the database.</p>
 	<p><a href="images/cors.jpg"><img src="images/cors.jpg" alt="CORS" width="453" height="270" /></a></p>
 	<p>Solving this issue is a simple process. All that needs to be done is to replace the asterisk, which allows posts from any domain, with an actual URI of the page that is actually intended to do the posting.</p>
 	<p>An even more elegant solution would be to disable CORS entirely, and instead host the 2048 game itself on the server-side, perhaps on the index with a scoreboard integrated with the page.</p>
+	<h3>Mongo authentication disabled</h3>
+	<p>Affects the submit.json API. MEDIUM severity: this issue is not too severe assuming the above solutions have been implemented, but a mischievous user could still post enough data to exceed the capacity on MongoLabs.</p>
+	<p>As seen above, I could easily post a document using the curl command to create my own arbitrary high score entries to be displayed to the client through the application. An additional security measure that could be implemented to protect the database would be enable client access authentication. To implement this measure, a unique unique key can be stored within a keyfile, whose path is to be specified in the mongod configuration file. Once this has been done, start a mongod instance and specify the config file's path with the command <code>mongod --config [path]</code>. Then designate the user administrator by using <code>db.createUser</code> while running MongoDB through the localhost exception. From there, trusted users with dedicated usernames and passwords can be added. More info can be found <a href="http://docs.mongodb.org/manual/tutorial/enable-authentication/">here</a>.</p>
 	<h2>Conclusion</h2>
+	<p>There are quite a few vulnerabilites in the 2048 Game Center that leave it open to malicious attacks. The above solutions are quite simple to implement and go a long way in preventing untrusted data entries from outside sources. A future action to consider would be to implement ways to fix problems that already exist in the database prior to the above fixes, which prevent problematic data submissions from occurring in the first place.</p>
 </body>
 
 </html>
